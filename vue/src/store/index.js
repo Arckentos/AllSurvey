@@ -22,11 +22,7 @@ const store = createStore({
                 .then(({ data }) => {
                     commit('setUser', data);
                     return data;
-                })
-                .catch(function (error) {
-                    if (error) {
-                        console.log(error.response.data.message);
-                    }});
+                });
         },
     },
     mutations: {
