@@ -29,7 +29,7 @@
                 <div>
                   <MenuButton class="flex items-center max-w-xs text-sm bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                     <span class="sr-only">Open user menu</span>
-                    <img class="w-8 h-8 rounded-full" :src="user.imageUrl" alt="" />
+                    <img class="w-8 h-8 rounded-full" alt="" />
                   </MenuButton>
                 </div>
                 <transition enter-active-class="transition duration-100 ease-out" enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100" leave-active-class="transition duration-75 ease-in" leave-from-class="transform scale-100 opacity-100" leave-to-class="transform scale-95 opacity-0">
@@ -60,7 +60,7 @@
         <div class="pt-4 pb-3 border-t border-gray-700">
           <div class="flex items-center px-5">
             <div class="flex-shrink-0">
-              <!-- <img class="w-10 h-10 rounded-full" :src="user.imageUrl" alt="" /> -->
+              <img class="w-10 h-10 rounded-full" alt="" />
             </div>
             <div class="ml-3">
               <div class="text-base font-medium leading-none text-white">{{ user.name }}</div>
