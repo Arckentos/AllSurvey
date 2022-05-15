@@ -60,7 +60,7 @@
         <div class="pt-4 pb-3 border-t border-gray-700">
           <div class="flex items-center px-5">
             <div class="flex-shrink-0">
-              <img class="w-10 h-10 rounded-full" :src="user.imageUrl" alt="" />
+              <!-- <img class="w-10 h-10 rounded-full" :src="user.imageUrl" alt="" /> -->
             </div>
             <div class="ml-3">
               <div class="text-base font-medium leading-none text-white">{{ user.name }}</div>
