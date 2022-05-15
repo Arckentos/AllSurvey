@@ -56,6 +56,21 @@
                         </div>
                     </div>
 
+                    <div class="px-4 py-5 space-y-6 bg-white sm:p-6">
+                        <h3 class="flex items-center justify-between text-2xl font-semibold">Questions
+                            <!-- Add new question -->
+                            <button type="button" class="flex items-center gap-2 px-4 py-2 text-sm text-white bg-gray-600 rounded-md hover:bg-gray-700">
+                                <PlusIcon class="w-4 h-4"></PlusIcon>
+                                Add Question
+                            </button>
+                        </h3>
+                        <div class="text-center text-gray-600" v-if="!model.questions.length">
+                            You don't have any questions created !
+                        </div>
+                        <div v-for="(question, index) in model.questions" :key="question.id">
+                            <QuestionEditor :question="question" :index="index" @change="questionChange" @addQuestion="addQuestion" @deleteQuestion="deleteQuestion" />
+                        </div>
+                    </div>
 
                     <div class="px-4 py-3 text-right rounded-md bg-gray-50 sm:px-6">
                         <button type="submit" class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Save</button>
@@ -71,8 +86,10 @@
 import { PhotographIcon, PlusIcon } from "@heroicons/vue/outline";
 import { ref } from "vue";
 import store from "../store";
-import PageComponent from "../components/PageComponent.vue";
 import { useRoute } from "vue-router";
+
+import PageComponent from "../components/PageComponent.vue";
+import QuestionEditor from "../components/editor/QuestionEditor.vue";
 
 const route = useRoute();
 
