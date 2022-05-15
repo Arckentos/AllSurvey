@@ -11,7 +11,7 @@
         </template>
 
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-            <div class="flex rounded-md flex-col py-4 px-5 shadow-md cursor-pointer bg-white hover:bg-gray-50 h-[470px]" v-for="survey in surveys" :key="survey.id">
+            <div class="flex rounded-md flex-col py-4 px-5 shadow-md bg-white hover:bg-gray-50 h-[470px]" v-for="survey in surveys" :key="survey.id">
                 <img class="object-cover w-full h-48 rounded" :src="survey.image" alt="">
                 <h4 class="mt-4 text-lg font-bold">{{ survey.title }}</h4>
                 <div class="flex-1 overflow-hidden" v-html="survey.description"></div>
@@ -37,4 +37,10 @@ import { computed } from 'vue';
 import store from '../store';
 
 const surveys = computed(() => store.state.surveys);
+
+function deleteSurvey(survey) {
+    if (confirm('Are you sure you want to delete this survey?')) {
+        
+    }
+}
 </script>
