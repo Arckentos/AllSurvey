@@ -50,8 +50,7 @@
 </template>
 
 <script setup>
-import { LockClosedIcon } from '@heroicons/vue/solid'
-import { XIcon } from '@heroicons/vue/solid'
+import { LockClosedIcon, XIcon } from '@heroicons/vue/solid'
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import store from '../store';
