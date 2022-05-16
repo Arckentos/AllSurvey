@@ -3,11 +3,12 @@
         <template v-slot:header>
             <div class="flex items-center justify-between">
                 <h1 class="text-3xl font-bold text-gray-900">
-                    {{ model.id ? model.title : 'Create a survey' }}
+                    {{ route.params.id ? model.title : 'Create a survey' }}
                 </h1>
             </div>
         </template>
-        <form @submit.prevent="saveSurvey">
+        <div v-if="surveyLoading" class="flex justify-center">Loading...</div>
+        <form v-else @submit.prevent="saveSurvey">
             <div class="shadow sm:rounded-md sm:overflow-hidden">
                 <!-- Survey fields -->
                 <div class="px-4 py-5 space-y-6 bg-white sm:p-6">
@@ -15,12 +16,12 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Image</label>
                         <div class="flex items-center mt-1">
-                            <img class="object-cover w-64 h-48" v-if="model.image" :src="model.image" :alt="model.title">
-                            <span class="flex items-center justify-center w-12 h-12 overflow-hidden bg-gray-100 rounded-full" v-else>
+                            <img v-if="model.image_url" class="object-cover w-64 h-48 rounded" :src="model.image_url" :alt="model.title">
+                            <span v-else class="flex items-center justify-center w-12 h-12 overflow-hidden bg-gray-100 rounded-full">
                                 <PhotographIcon class="h-[80%] w-[80%] text-gray-300"></PhotographIcon>
                             </span>
                             <button type="button" class="relative px-3 py-2 ml-5 overflow-hidden text-sm font-medium leading-4 text-gray-700 bg-white border border-gray-300 rounded-md shadow-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                <input type="file" class="absolute top-0 bottom-0 left-0 right-0 opacity-0 cursor-pointer" name="" id="">
+                                <input type="file" class="absolute top-0 bottom-0 left-0 right-0 opacity-0 cursor-pointer" @change="onImageChoose">
                                 Change
                             </button>
                         </div>
@@ -83,9 +84,9 @@
 </template>
 
 <script setup>
-import { PhotographIcon, PlusIcon } from "@heroicons/vue/outline";
+import { PhotographIcon, PlusIcon, TrashIcon } from "@heroicons/vue/outline";
 import { v4 as uuidv4 } from "uuid";
-import { ref } from "vue";
+import { computed, ref, watch } from "vue";
 import store from "../store";
 import { useRoute, useRouter } from "vue-router";
 
@@ -95,19 +96,44 @@ import QuestionEditor from "../components/editor/QuestionEditor.vue";
 const router = useRouter();
 const route = useRoute();
 
+const surveyLoading = computed(() => store.state.currentSurvey.loading);
+
 let model = ref({
     title: "",
     status: false,
     description: null,
-    image: null,
+    image_url: null,
     expire_date: null,
     questions: [],
 })
 
+// Wtach the current survey data change and when this happen we update local survey
+watch(
+    () => store.state.currentSurvey.data,
+    (newVal, oldVal) => {
+        model.value = {
+            ...JSON.parse(JSON.stringify(newVal)),
+            status: newVal.status !== "draft",
+        }
+    }
+);
+
 if (route.params.id) {
-    model.value = store.state.surveys.find(
-        (s) => s.id === parseInt(route.params.id)
-    )
+    store.dispatch('getSurvey', route.params.id);
+}
+
+function onImageChoose(ev) {
+    const file = ev.target.files[0];
+
+    const reader = new FileReader();
+    reader.onload = () => {
+        // The field to send on backend and apply validations
+        model.value.image = reader.result;
+
+        // The field to display here
+        model.value.image_url = reader.result;
+    };
+    reader.readAsDataURL(file);
 }
 
 function addQuestion(index) {
@@ -146,6 +172,9 @@ function saveSurvey() {
     store.dispatch("saveSurvey", model.value)
         .then(({ data }) => {
             router.push({ name: 'SurveyView', params: { id: data.data.id } });
+        })
+        .catch((err) => {
+            console.log(err);
         });
 }
 </script>
