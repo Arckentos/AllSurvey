@@ -5,6 +5,11 @@
                 <h1 class="text-3xl font-bold text-gray-900">
                     {{ route.params.id ? model.title : 'Create a survey' }}
                 </h1>
+
+                <button type="button" v-if="route.params.id" @click="deleteSurvey()" class="flex items-center justify-center gap-1 px-3 py-2 text-white bg-red-600 rounded-md hover:bg-red-700">
+                    <TrashIcon class="inline-block w-4 h-4"></TrashIcon>
+                    Delete survey
+                </button>
             </div>
         </template>
         <div v-if="surveyLoading" class="flex justify-center">Loading...</div>
@@ -171,10 +176,27 @@ function questionChange(question) {
 function saveSurvey() {
     store.dispatch("saveSurvey", model.value)
         .then(({ data }) => {
-            router.push({ name: 'SurveyView', params: { id: data.data.id } });
+            router.push({
+                name: 'SurveyView',
+                params: { id: data.data.id }
+            });
         })
         .catch((err) => {
             console.log(err);
         });
+}
+
+/**
+ * Delete survey
+ */
+function deleteSurvey() {
+    if (confirm('Are you sure you really want to delete this survey?')) {
+        store.dispatch('deleteSurvey', model.value.id)
+            .then(() => {
+                router.push({
+                    name: "Surveys",
+                })
+            })
+    }
 }
 </script>
