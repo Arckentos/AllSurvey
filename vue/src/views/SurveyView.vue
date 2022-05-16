@@ -65,7 +65,7 @@
                     <div class="px-4 py-5 space-y-6 bg-white sm:p-6">
                         <h3 class="flex items-center justify-between text-2xl font-semibold">Questions
                             <!-- Add new question -->
-                            <button type="button" class="flex items-center gap-2 px-4 py-2 text-sm text-white bg-gray-600 rounded-md hover:bg-gray-700">
+                            <button type="button" class="flex items-center gap-2 px-4 py-2 text-sm text-white bg-gray-600 rounded-md hover:bg-gray-700" @click="addQuestion">
                                 <PlusIcon class="w-4 h-4"></PlusIcon>
                                 Add Question
                             </button>
@@ -162,7 +162,7 @@ function deleteQuestion(question) {
 function questionChange(question) {
     model.value.questions = model.value.questions.map(
         (q) => {
-            if (q.id === questions.id) {
+            if (q.id === question.id) {
                 return JSON.parse(JSON.stringify(question));
             }
             return q;
@@ -182,7 +182,7 @@ function saveSurvey() {
             });
         })
         .catch((err) => {
-            console.log(err);
+            console.error(err);
         });
 }
 
@@ -197,6 +197,9 @@ function deleteSurvey() {
                     name: "Surveys",
                 })
             })
+            .catch((err) => {
+                console.error(err);
+            });
     }
 }
 </script>
